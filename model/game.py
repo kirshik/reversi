@@ -36,8 +36,14 @@ class Game:
                 self.board.update_cell(row, col, self.curr_player)
 
     def is_disks_couse_flip(self, row, col):
-        # TODO
-        pass
+        board_mat = self.board.get_matrix()
+        # row
+        for i in range(self.board_size):
+            if i != col and board_mat[row][i] == self.board.EMPTY_CELL:
+                pass
+            elif i == col and i == 0:
+                if board_mat[row][i+1] != (self.OTHER_PLAYER - self.curr_player):
+                    return False
 
     def is_valid_move(self, row, col):
         """dinamical function depends of the rools
