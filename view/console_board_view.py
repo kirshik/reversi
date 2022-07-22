@@ -24,13 +24,10 @@ class BoardConsoleView(BoardView):
             board = f' {i}|'
 
             for j in range(board_size):
-                cell = self.board.get_cell(i-1, j-1)
+                cell = self.board.get_cell(i-1, j)
                 board += f' {self.symbols[cell]} |'
 
             print(row_border)
             print(board)
 
         print(row_border)
-        print(
-            f'{self.board.num_disks.keys()[0]} score: {self.board.num_disks.values()[0]}, \
-               {self.board.num_disks.keys()[1]} score: {self.board.num_disks.values()[1]} ')

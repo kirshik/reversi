@@ -15,7 +15,6 @@ class Board:
     def update_cell(self, row, column, player):
         self.mat[row][column] = player
 
-    # do I even need in?
     def get_matrix(self):
         return self.mat
 
