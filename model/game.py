@@ -78,18 +78,16 @@ class Game:
         else:
             return False
 
-    def check_winner(self):
+    def check_winner(self, path, date_time):
         # dictionary key = player symbol, value = disks number
         num_disks = self.board.num_disks()
+        max_val = max(num_disks.values())
+        winner = [key[0] for key in num_disks.items() if key[1] == max_val][0]
+        summary = (f'Date and time of the Game: {date_time}\n \
+                     {Player(winner)}\n\
+                         X: {num_disks[Player.X]} , O: {num_disks[Player.O]}')
 
-        if self.board.is_full():
-
-            if num_disks[self.curr_player] > \
-                    num_disks[self.OTHER_PLAYER - self.curr_player]:
-                return self.curr_player
-
-            else:
-                return self.OTHER_PLAYER - self.curr_player
-
-        elif len(num_disks.keys()) == 1:
-            return num_disks.items()[0]
+        if self.is_terminated():
+            with open(path) as f:
+                f.write(summary)
+            return summary
