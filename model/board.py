@@ -19,34 +19,60 @@ class Board:
     def get_matrix(self) -> list:  # board matrix
         return self.mat
 
-    def get_row(self, row) -> list:
-        return self.mat[row]
+    def is_inside(self, row, col):
+        if (0 <= row, col < self.size):
+            return True
+        else:
+            return False
 
-    def get_column(self, col) -> list:
-        column = []
-        for i in range(self.size):
-            column.append(self.mat[i][col])
-        return column
+    # def get_row(self, row) -> list:
+    #     return self.mat[row]
 
-    def get_diagonal(self, row, col) -> list:
-        diag_up = []
-        diag_down = []
-        row_copy = row
-        col_copy = col
-        cell = [self.mat[row][col]]
-        while (len(diag_up)+len(diag_down)+1) != self.size:
-            if (row_copy - 1) >= 0 and (col_copy + 1) <= (self.size - 1):
-                diag_up.append(self.mat[row_copy - 1][col_copy + 1])
-                row_copy -= 1
-                col_copy += 1
-            elif (row + 1) <= (self.size - 1) and (col - 1) >= 0:
-                diag_down.append(self.mat[row + 1][col - 1])
-                row += 1
-                col -= 1
-            else:
-                break
-        # return list with diagonal and place of cell user want to change
-        return [(diag_down + cell + diag_up), len(diag_down)]
+    # def get_column(self, col) -> list:
+    #     column = []
+    #     for i in range(self.size):
+    #         column.append(self.mat[i][col])
+    #     return column
+
+    # def get_diagonal_right(self, row, col) -> list:
+    #     diag_up = []
+    #     diag_down = []
+    #     row_copy = row
+    #     col_copy = col
+    #     cell = [self.mat[row][col]]
+    #     while (len(diag_up)+len(diag_down)+1) != self.size:
+    #         if (row_copy - 1) >= 0 and (col_copy + 1) <= (self.size - 1):
+    #             diag_up.append(self.mat[row_copy - 1][col_copy + 1])
+    #             row_copy -= 1
+    #             col_copy += 1
+    #         elif (row + 1) <= (self.size - 1) and (col - 1) >= 0:
+    #             diag_down.append(self.mat[row + 1][col - 1])
+    #             row += 1
+    #             col -= 1
+    #         else:
+    #             break
+    #     # return list with diagonal and place of cell user want to change
+    #     return [(diag_down + cell + diag_up), len(diag_down)]
+
+    # def get_diagonal_left(self, row, col) -> list:
+    #     diag_up = []
+    #     diag_down = []
+    #     row_copy = row
+    #     col_copy = col
+    #     cell = [self.mat[row][col]]
+    #     while (len(diag_up)+len(diag_down)+1) != self.size:
+    #         if (row_copy - 1) >= 0 and (col_copy - 1) >= 0:
+    #             diag_up.append(self.mat[row_copy - 1][col_copy - 1])
+    #             row_copy -= 1
+    #             col_copy -= 1
+    #         elif (row + 1) <= (self.size - 1) and (col + 1) <= (self.size - 1):
+    #             diag_down.append(self.mat[row + 1][col + 1])
+    #             row += 1
+    #             col -= 1
+    #         else:
+    #             break
+    #     # return list with diagonal and place of cell user want to change
+    #     return [(diag_down + cell + diag_up), len(diag_down)]
 
     def is_full(self):
         for row in self.mat:

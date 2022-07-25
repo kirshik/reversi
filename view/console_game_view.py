@@ -15,7 +15,7 @@ class GameConsoleView(GameView):
     def get_move(self):
         s = input('Enter your move (row, col):').split(',')
         # TODO catch exception
-        row, col = int(s[0]-1), int(s[1]-1)
+        row, col = int(s[0]) - 1, int(s[1]) - 1
         return row, col
 
     def turn(self):

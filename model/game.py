@@ -36,98 +36,41 @@ class Game:
             row (int): row of board
             col (int): column of board
         """
-
-        def check_lst(lst, cell):
-            other_player = self.OTHER_PLAYER - self.curr_player
-
-            i = cell + 1
-            check_i = set()
-            while i < len(lst):
-                if lst[i] == other_player or other_player in check_i:
-                    check_i.add(other_player)
-                    if (i + 1) < len(lst) and lst[i + 1] == self.curr_player:
-                        return True
-                i += 1
-
-            j = cell - 1
-            check_j = set()
-            while j > 0 and j < len(lst[:j + 1]):
-                if lst[j] == other_player or other_player in check_j:
-                    check_j.add(other_player)
-                    if (j - 1) >= 0 and lst[j - 1] == self.curr_player:
-                        return True
-                j -= 1
-
-            return False
-
-        if self.board.get_row(row)[col] != self.board.EMPTY_CELL:
-            return False
-        else:
-            check_row = check_lst(self.board.get_row(row),
-                                  self.board.get_row(row)[col])
-
-            check_col = check_lst(self.board.get_column(col),
-                                  self.board.get_column(col)[row])
-
-            check_diag = check_lst(self.board.get_diagonal(row, col)[0],
-                                   self.board.get_diagonal(row, col)[1])
-
-            if check_row and check_col and check_diag:
-                return True
-            else:
-                return False
-#
-#
-#
-#
-#
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0),
+                      (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        target_cell = (row, col)
+        for direction in directions:
+            curr_cell = target_cell
+            to_update = []
+            while self.board.is_inside(curr_cell[0], curr_cell[1]):
+                curr_cell = (curr_cell[0] + direction[0],
+                             curr_cell[1] + direction[1])
+                if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
+                    to_update.append(curr_cell)
+                elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.curr_player and len(to_update) > 0:
+                    return True
+                else:
+                    break
+        return False
 
     def make_move(self, row, col):
-        # TODO
-        def update_right(lst, cell):
-            other_player = self.OTHER_PLAYER - self.curr_player
-            i = cell + 1
-            check_i = set()
-            while i < len(lst):
-                if lst[i] == other_player or other_player in check_i:
-                    check_i.add(other_player)
-                    if (i + 1) < len(lst) and lst[i + 1] == self.curr_player:
-                        return True
-                i += 1
-
-        def update_left(lst, cell):
-            other_player = self.OTHER_PLAYER - self.curr_player
-            j = cell - 1
-            check_j = set()
-            while j > 0 and j < len(lst[:j + 1]):
-                if lst[j] == other_player or other_player in check_j:
-                    check_j.add(other_player)
-                    if (j - 1) >= 0 and lst[j - 1] == self.curr_player:
-                        return True
-                j -= 1
-
-        def update_cell_of_row(lst, cell):
-            pass
-
-        def update_cell_of_col(lst, cell):
-            pass
-
-        def update_cell_of_diag(lst, cell):
-            pass
-        update_cell_of_row(self.board.get_row(row),
-                           self.board.get_row(row)[col])
-        update_cell_of_col(self.board.get_column(col),
-                           self.board.get_column(col)[row])
-        update_cell_of_diag(self.board.get_diagonal(row, col)[0],
-                            self.board.get_diagonal(row, col)[1])
-
-#
-#
-#
-#
-#
-#
-#
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0),
+                      (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        target_cell = (row, col)
+        for direction in directions:
+            curr_cell = target_cell
+            to_update = []
+            while self.board.is_inside(curr_cell[0], curr_cell[1]):
+                curr_cell = (curr_cell[0] + direction[0],
+                             curr_cell[1] + direction[1])
+                if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
+                    to_update.append(curr_cell)
+                elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.curr_player and len(to_update) > 0:
+                    for i in to_update:
+                        self.board.update_cell(i[0], i[1], self.curr_player)
+                else:
+                    break
+        self.board.update_cell(row, col, self.curr_player)
 
     def is_terminated(self) -> boolean:
         if self.board.is_full() or len(self.board.num_disks().keys()) == 1:
