@@ -1,0 +1,70 @@
+@startuml Reversi Diagram
+class GameController{
+  +view : GameView
+  +game : Game
+  +choose_rules()
+  +run_game()
+  }
+class InvalidMoveError{
+  message: str
+}
+class Board{
+  EMPTY_CELL = 0 
+  size : int
+  matrix : list 
+  get_cell(row,col) : int
+  update_cell(row,col, player) : None
+  is_inside() : bool
+  is_full() : bool
+  num_disks() : dict
+}
+class Game{
+  OTHER_PLAYER = 3
+  SYMBOLS = {0: 'DRAW', 1: 'X', 2: 'O'}
+  board_size : int
+  board : Board
+  curr_player : Player
+  put_started_disks() : None
+  change_player() : None
+  is_valid_move(row, col) : Bool
+  make_move(row, col) : None
+  is_terminated() : bool
+  check_winner(path, date_time)
+}
+class Player(IntEnum){
+  X = 1
+  O = 2
+}
+class BoardView{
+  board : Board
+  draw_board()
+  }
+class ConsoleBoardView{
+  symbols : dict
+  draw_board()
+}
+class GameView{
+  game : Game
+  get_move()
+  draw_board(board_size)
+  display_winner()
+}
+class ConsoleGameView{
+  GAME_COUNT = 0
+  board : Board
+  board_view : ConsoleBoardView
+  get_move()
+  turn()
+  draw_board()
+  display_winner()
+  wrong_cell()
+  value_error_msg()
+}
+GameView <|-- ConsoleGameView
+BoardView <|-- ConsoleBoardView
+GameController <|-- (GameView, Game)
+GameController <|-- BoardView
+Game <|-- Board 
+GameController <|-- InvalidMoveError
+
+@enduml

@@ -1,6 +1,6 @@
 from enum import IntEnum
 
 
-class Player:
+class Player(IntEnum):
     X = 1
     O = 2
