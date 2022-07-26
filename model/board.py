@@ -16,7 +16,7 @@ class Board:
         self.mat[row][column] = player
 
     def is_inside(self, row, col):
-        if (0 <= row, col < self.size):
+        if (0 <= row < self.size and 0 <= col < self.size):
             return True
         else:
             return False

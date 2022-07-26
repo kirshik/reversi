@@ -11,6 +11,7 @@ class GameController:
         self.game = game
 
     def choose_rule(self):
+        # TODO
         print()
 
     def run_game(self):
@@ -19,12 +20,21 @@ class GameController:
         console_game.draw_board()
         console_game.turn()
         while not self.game.is_terminated():
-            row, col = console_game.get_move()
-            if self.game.is_valid_move(row, col):
-                self.game.make_move(row, col)
-                console_game.draw_board()
-                self.game.change_player()
-                console_game.turn()
-                print("\n")
-            else:
-                raise InvalidMoveError
+            try:
+                get_move = console_game.get_move()
+                if get_move != "pass":
+                    row, col = get_move
+                    if self.game.is_valid_move(row, col):
+                        self.game.make_move(row, col)
+                        console_game.draw_board()
+                        self.game.change_player()
+                        console_game.turn()
+                    else:
+                        console_game.wrong_cell()
+                else:
+                    if not self.game.is_terminated():
+                        self.game.change_player()
+                        console_game.turn()
+            except ValueError:
+                console_game.value_error_msg()
+        console_game.display_winner()

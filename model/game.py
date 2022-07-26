@@ -5,6 +5,7 @@ from model.players import Player
 
 class Game:
     OTHER_PLAYER = 3
+    SYMBOLS = {0: 'DRAW', 1: 'X', 2: 'O'}
 
     def __init__(self, board_size) -> None:
         self.board_size = board_size
@@ -42,7 +43,8 @@ class Game:
         for direction in directions:
             curr_cell = target_cell
             to_update = []
-            while self.board.is_inside(curr_cell[0], curr_cell[1]):
+            while self.board.is_inside(curr_cell[0] + direction[0],
+                                       curr_cell[1] + direction[1]):
                 curr_cell = (curr_cell[0] + direction[0],
                              curr_cell[1] + direction[1])
                 if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
@@ -60,7 +62,8 @@ class Game:
         for direction in directions:
             curr_cell = target_cell
             to_update = []
-            while self.board.is_inside(curr_cell[0], curr_cell[1]):
+            while self.board.is_inside(curr_cell[0] + direction[0],
+                                       curr_cell[1] + direction[1]):
                 curr_cell = (curr_cell[0] + direction[0],
                              curr_cell[1] + direction[1])
                 if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
@@ -73,7 +76,7 @@ class Game:
         self.board.update_cell(row, col, self.curr_player)
 
     def is_terminated(self) -> boolean:
-        if self.board.is_full() or len(self.board.num_disks().keys()) == 1:
+        if self.board.is_full() or len(self.board.num_disks().keys()) == 2:
             return True
         else:
             return False
@@ -81,13 +84,20 @@ class Game:
     def check_winner(self, path, date_time):
         # dictionary key = player symbol, value = disks number
         num_disks = self.board.num_disks()
-        max_val = max(num_disks.values())
-        winner = [key[0] for key in num_disks.items() if key[1] == max_val][0]
-        summary = (f'Date and time of the Game: {date_time}\n \
-                     {Player(winner)}\n\
-                         X: {num_disks[Player.X]} , O: {num_disks[Player.O]}')
+        if Player.X not in num_disks:
+            num_disks[Player.X] = 0
+        if Player.O not in num_disks:
+            num_disks[Player.O] = 0
+        if num_disks[Player.X] > num_disks[Player.O]:
+            winner = Player.X
+        elif num_disks[Player.O] > num_disks[Player.X]:
+            winner = Player.O
+        else:
+            winner = 0
+        summary = (
+            f'Date and time of the Game: {date_time}\n Winner: {self.SYMBOLS[winner]}\n X: {num_disks[Player.X]} , O: {num_disks[Player.O]}')
 
         if self.is_terminated():
-            with open(path) as f:
+            with open(path, "w") as f:
                 f.write(summary)
-            return summary
+            return self.SYMBOLS[winner]

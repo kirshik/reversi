@@ -18,8 +18,8 @@ def menu():
     print("_" * 35)
     try:
         board_size = int(input("Please choose board size(8, 10, 16 etc.): "))
-    except ValueError:
-        print("Please enter a number, not letters")
+    except:
+        print("Please enter a number, not symbols or letters")
     print("_" * 35)
     game = Game(board_size)
     g1 = GameController(view, game)
