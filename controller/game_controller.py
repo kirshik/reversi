@@ -3,10 +3,16 @@ from rules.rules import ChangedRules
 from view.console_board_view import BoardConsoleView
 from view.console_game_view import GameConsoleView
 from exceptions.invalid_move_error import InvalidMoveError
+from view.game_view import GameView
+from globals.symbols import PLAYERS
+from player_types.human import Human
+from player_types.simple_ai import SimpleAI
+from player_types.advanced_ai import AdvancedAI
 
 
 class GameController:
-    def __init__(self, view, game: Game) -> None:
+    def __init__(self, view: GameView, game: Game, player_type=1) -> None:
+        self.player_type = PLAYERS[player_type]
         self.view = view
         self.game = game
 
@@ -16,12 +22,17 @@ class GameController:
 
     def run_game(self):
         self.game.put_started_disks()
-        console_game = GameConsoleView(self.game, self.game.board)
+        console_game = self.view
         console_game.draw_board()
         console_game.turn()
         while not self.game.is_terminated():
             try:
-                get_move = console_game.get_move()
+                if self.player_type == "human":
+                    get_move = console_game.get_move()
+                elif self.player_type == "simple_ai":
+                    get_move = SimpleAI.make_move()
+                else:
+                    get_move = AdvancedAI.make_move()
                 if get_move != "pass":
                     row, col = get_move
                     if self.game.is_valid_move(row, col):

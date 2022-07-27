@@ -17,3 +17,7 @@ class GameView(ABC):
     @abstractmethod
     def display_winner(self, player):
         pass
+
+    @abstractmethod
+    def turn(self):
+        pass

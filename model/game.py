@@ -1,11 +1,11 @@
 from xmlrpc.client import boolean
 from model.board import Board
 from model.players import Player
+from globals.symbols import SYMBOLS
 
 
 class Game:
     OTHER_PLAYER = 3
-    SYMBOLS = {0: 'DRAW', 1: 'X', 2: 'O'}
 
     def __init__(self, board_size) -> None:
         self.board_size = board_size
@@ -95,9 +95,9 @@ class Game:
         else:
             winner = 0
         summary = (
-            f'Date and time of the Game: {date_time}\n Winner: {self.SYMBOLS[winner]}\n X: {num_disks[Player.X]} , O: {num_disks[Player.O]}')
+            f'Date and time of the Game: {date_time}\n Winner: {SYMBOLS[winner]}\n X: {num_disks[Player.X]} , O: {num_disks[Player.O]}')
 
         if self.is_terminated():
             with open(path, "w") as f:
                 f.write(summary)
-            return self.SYMBOLS[winner]
+            return SYMBOLS[winner]
