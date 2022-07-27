@@ -6,7 +6,7 @@ from player_types.simple_ai import SimpleAI
 from player_types.advanced_ai import AdvancedAI
 
 
-class Menu():
+class Menu:
     def __init__(self) -> None:
         pass
 

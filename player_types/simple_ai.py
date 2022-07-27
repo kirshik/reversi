@@ -3,7 +3,7 @@ from model.game import Game
 from globals.symbols import DIRECTIONS
 
 
-class SimpleAI():
+class SimpleAI:
     def __init__(self, board: Board, game: Game, board_size: int) -> None:
         self.game = game
         self.board = board
