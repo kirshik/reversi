@@ -1,6 +1,9 @@
 from controller.game_controller import GameController
 from model.game import Game
 from view.console_game_view import GameConsoleView
+from player_types.human import Human
+from player_types.simple_ai import SimpleAI
+from player_types.advanced_ai import AdvancedAI
 
 
 class Menu():
@@ -53,6 +56,12 @@ class Menu():
                 print("Please enter a number, not symbols or letters")
         print("_" * 35)
         game = Game(board_size)
+        if player == 1:
+            player = Human()
+        elif player == 2:
+            player = SimpleAI(game.board, game, game.board_size)
+        else:
+            player = AdvancedAI()
         if view_option == 1:
             view = GameConsoleView(game, game.board)
         elif view_option == 2:

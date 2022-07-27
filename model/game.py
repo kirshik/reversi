@@ -1,7 +1,7 @@
 from xmlrpc.client import boolean
 from model.board import Board
 from model.players import Player
-from globals.symbols import SYMBOLS
+from globals.symbols import SYMBOLS, DIRECTIONS
 
 
 class Game:
@@ -37,10 +37,8 @@ class Game:
             row (int): row of board
             col (int): column of board
         """
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0),
-                      (1, 1), (1, -1), (-1, 1), (-1, -1)]
         target_cell = (row, col)
-        for direction in directions:
+        for direction in DIRECTIONS:
             curr_cell = target_cell
             to_update = []
             while self.board.is_inside(curr_cell[0] + direction[0],
@@ -56,10 +54,8 @@ class Game:
         return False
 
     def make_move(self, row, col):
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0),
-                      (1, 1), (1, -1), (-1, 1), (-1, -1)]
         target_cell = (row, col)
-        for direction in directions:
+        for direction in DIRECTIONS:
             curr_cell = target_cell
             to_update = []
             while self.board.is_inside(curr_cell[0] + direction[0],

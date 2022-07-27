@@ -8,11 +8,12 @@ from globals.symbols import PLAYERS
 from player_types.human import Human
 from player_types.simple_ai import SimpleAI
 from player_types.advanced_ai import AdvancedAI
+from model.players import Player
 
 
 class GameController:
-    def __init__(self, view: GameView, game: Game, player_type=1) -> None:
-        self.player_type = PLAYERS[player_type]
+    def __init__(self, view: GameView, game: Game, player_type) -> None:
+        self.player_type = player_type
         self.view = view
         self.game = game
 
@@ -27,12 +28,18 @@ class GameController:
         console_game.turn()
         while not self.game.is_terminated():
             try:
-                if self.player_type == "human":
+                if type(self.player_type) == Human:
                     get_move = console_game.get_move()
-                elif self.player_type == "simple_ai":
-                    get_move = SimpleAI.make_move()
+                elif type(self.player_type) == SimpleAI:
+                    if self.game.curr_player == Player.O:
+                        get_move = self.player_type.make_move()
+                    else:
+                        get_move = console_game.get_move()
                 else:
-                    get_move = AdvancedAI.make_move()
+                    if self.game.curr_player == Player.O:
+                        get_move = self.player_type.make_move()
+                    else:
+                        get_move = console_game.get_move()
                 if get_move != "pass":
                     row, col = get_move
                     if self.game.is_valid_move(row, col):
