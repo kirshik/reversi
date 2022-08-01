@@ -10,6 +10,8 @@ class BoardConsoleView(BoardView):
         super().__init__(board)
 
     def draw_board(self):
+        """draw console board cell by cell
+        """
         board_size = self.board.size
         header = "  |"
 

@@ -12,6 +12,8 @@ class Menu:
 
     @staticmethod
     def menu():
+        """display menu
+        """
         OPTIONS_VIEW = {
             1: "- for playing Reversi in console",
             2: "- for playing Reversi in web",

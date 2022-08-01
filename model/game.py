@@ -13,6 +13,8 @@ class Game:
         self.curr_player = Player.X
 
     def put_started_disks(self):
+        """put 4 started disks in the midle of board
+        """
         absolut_pos = self.board_size//2 - 1
         other_player = self.OTHER_PLAYER - self.curr_player
         # 1 disk current player
@@ -32,6 +34,7 @@ class Game:
     def is_valid_move(self, row, col) -> bool:
         """dinamical function depends of the rools
         show valid of player move
+        go by all directions and check validity of move
 
         Args:
             row (int): row of board
@@ -54,6 +57,12 @@ class Game:
         return False
 
     def make_move(self, row, col):
+        """make move by updating cells in all directions
+
+        Args:
+            row (int): row of board
+            col (int): column of board
+        """
         target_cell = (row, col)
         for direction in DIRECTIONS:
             curr_cell = target_cell
@@ -71,13 +80,24 @@ class Game:
                     break
         self.board.update_cell(row, col, self.curr_player)
 
-    def is_terminated(self) -> boolean:
+    def is_terminated(self) -> bool:
+        """check game termination
+        """
         if self.board.is_full() or len(self.board.num_disks().keys()) == 2:
             return True
         else:
             return False
 
     def check_winner(self, path, date_time):
+        """define winner and write data of the game in file
+
+        Args:
+            path (str): path where file must be
+            date_time (str): date and time of the game
+
+        Returns:
+            int: winners symbol
+        """
         # dictionary key = player symbol, value = disks number
         num_disks = self.board.num_disks()
         if Player.X not in num_disks:

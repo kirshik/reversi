@@ -19,6 +19,9 @@ class GameController:
         print()
 
     def run_game(self):
+        """put started disks, identificate
+         player and run the game
+        """
         self.game.put_started_disks()
         console_game = self.view
         console_game.draw_board()

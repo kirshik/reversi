@@ -10,6 +10,13 @@ class SimpleAI:
         self.board_size = board_size
 
     def make_move(self):
+        """check all possible moves and define move 
+        which reverse maximux number of disks
+
+        Returns:
+            row (int): row of the board
+            col (int): column of the board
+        """
         move = {}
         for row in range(self.board_size):
             for col in range(self.board_size):

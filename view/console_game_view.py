@@ -16,6 +16,12 @@ class GameConsoleView(GameView):
         self.board_view = BoardConsoleView(game.board)
 
     def get_move(self):
+        """get move from the player
+
+        Returns:
+            row (int): row of the board
+            col (int): column of the board
+        """
         s = input('Enter your move (row, col):').split(',')
         if s[0] != "pass":
             if len(s) > 1:
