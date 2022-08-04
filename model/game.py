@@ -7,9 +7,9 @@ from globals.symbols import SYMBOLS, DIRECTIONS
 class Game:
     OTHER_PLAYER = 3
 
-    def __init__(self, board_size) -> None:
+    def __init__(self, board_size, board: Board) -> None:
         self.board_size = board_size
-        self.board = Board(board_size)
+        self.board = board
         self.curr_player = Player.X
 
     def put_started_disks(self):
@@ -41,19 +41,23 @@ class Game:
             col (int): column of board
         """
         target_cell = (row, col)
-        for direction in DIRECTIONS:
-            curr_cell = target_cell
-            to_update = []
-            while self.board.is_inside(curr_cell[0] + direction[0],
-                                       curr_cell[1] + direction[1]):
-                curr_cell = (curr_cell[0] + direction[0],
-                             curr_cell[1] + direction[1])
-                if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
-                    to_update.append(curr_cell)
-                elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.curr_player and len(to_update) > 0:
-                    return True
-                else:
-                    break
+        if self.board.get_cell(row, col) == self.board.EMPTY_CELL:
+
+            for direction in DIRECTIONS:
+                curr_cell = target_cell
+                to_update = []
+                while self.board.is_inside(curr_cell[0] + direction[0],
+                                           curr_cell[1] + direction[1]):
+                    curr_cell = (curr_cell[0] + direction[0],
+                                 curr_cell[1] + direction[1])
+                    if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
+                        to_update.append(curr_cell)
+                    elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.curr_player and len(to_update) > 0:
+                        return True
+                    else:
+                        break
+        else:
+            return False
         return False
 
     def make_move(self, row, col):
@@ -91,6 +95,7 @@ class Game:
                 if self.board.get_cell(i, j) == self.board.EMPTY_CELL:
                     if self.is_valid_move(i, j):
                         valid_moves += 1
+                        return False
                 else:
                     pass
         # change player and check his valid moves
@@ -100,6 +105,7 @@ class Game:
                 if self.board.get_cell(i, j) == self.board.EMPTY_CELL:
                     if self.is_valid_move(i, j):
                         valid_moves += 1
+                        return False
                 else:
                     pass
         # change player back to save curr player position

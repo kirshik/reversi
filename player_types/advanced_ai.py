@@ -1,6 +1,7 @@
 from model.board import Board
 from model.game import Game
 from globals.symbols import DIRECTIONS
+from globals.symbols import SYMBOLS
 import copy
 
 
@@ -65,28 +66,37 @@ class AdvancedAI():
         board.update_cell(row, col, self.game.curr_player)
 
     def minimax(self, board: Board, max_player, min_player):
+        game = Game(self.board_size, board)
+        # change player to O, becouse O - AI player as defolt
+        game.change_player()
         # if game in terminal state return 1/-1/0 for win/lose/draw for  AI
-        if board.is_full() or (len(board.num_disks().keys()) == 2):
-            if len(board.num_disks().keys()) != 2:
-                if board.num_disks[max_player] > board.num_disks[min_player]:
-                    return 1
-                elif board.num_disks[min_player] > board.num_disks[max_player]:
-                    return -1
-                else:
-                    return 0
+        if game.is_terminated():
+            if game.check_winner("advancedAI.txt", "date") == SYMBOLS[max_player]:
+                return 1
+            elif game.check_winner("advancedAI.txt", "date") == SYMBOLS[min_player]:
+                return -1
             else:
-                if max_player in board.num_disks:
-                    return 1
-                else:
-                    return -1
+                return 0
         values = []
         possible_moves = []
         # possible_moves for AI player
         for i in range(self.board_size):
             for j in range(self.board_size):
                 if board.get_cell(i, j) == self.board.EMPTY_CELL:
-                    if self.game.is_valid_move(i, j):
+                    if game.is_valid_move(i, j):
                         possible_moves.append((i, j))
+        for move in possible_moves:
+            new_board = copy.deepcopy(board)
+
+            #self.make_possible_move(new_board, move[0], move[1])
+
+            game.make_move(move[0], move[1])
+            board_value = self.minimax(new_board, min_player, max_player)
+            values.append(board_value)
+        if game.curr_player == max_player:
+            return max(values)
+        else:
+            return min(values)
 
     def choose_move(self):
         possible_moves = []
@@ -98,15 +108,15 @@ class AdvancedAI():
                         possible_moves.append((i, j))
         # change_player
         self.game.change_player()
+        possible_moves_other_player = []
         # possible moves for other player
         for i in range(self.board_size):
             for j in range(self.board_size):
                 if self.board.get_cell(i, j) == self.board.EMPTY_CELL:
                     if self.game.is_valid_move(i, j):
-                        possible_moves.append((i, j))
+                        possible_moves_other_player.append((i, j))
         # change player back to save the game logic
         self.game.change_player()
-
         board_values = {}
         for move in possible_moves:
             new_board = copy.deepcopy(self.board)
@@ -114,7 +124,17 @@ class AdvancedAI():
             board_value = self.minimax(
                 new_board, self.game.curr_player, self.game.OTHER_PLAYER - self.game.curr_player)
             board_values[board_value] = move
+        self.game.change_player()
+
+        for move in possible_moves_other_player:
+            new_board = copy.deepcopy(self.board)
+            self.make_possible_move(new_board, move[0], move[1])
+            board_value = self.minimax(
+                new_board, self.game.OTHER_PLAYER - self.game.curr_player, self.game.curr_player)
+            board_values[board_value] = move
+        self.game.change_player()
+
         return board_values[max(board_values)]
 
     def make_move(self):
-        pass
+        self.choose_move()

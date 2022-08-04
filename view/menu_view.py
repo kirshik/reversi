@@ -4,6 +4,8 @@ from view.console_game_view import GameConsoleView
 from player_types.human import Human
 from player_types.simple_ai import SimpleAI
 from player_types.advanced_ai import AdvancedAI
+from model.board import Board
+from rules.rules import ChangedRules
 
 
 class Menu:
@@ -24,11 +26,17 @@ class Menu:
             2: "- for playing agains simple AI",
             3: "- for playing agains advanced AI"
         }
+        OPTIONS_RULES = {
+            1: "- for playing with \"open\", where you can put disks anywere",
+            2: "- for playing with standart Reversi rools"
+        }
 
         print("=" * 35)
         print("     Welcome to Reversi game!")
         print("=" * 35)
         print("_" * 35, "\n     Menu")
+
+        # get view type from user
         for option, message in OPTIONS_VIEW.items():
             print(option, message)
         print("_" * 35)
@@ -37,8 +45,22 @@ class Menu:
             try:
                 view_option = int(input("\nPlease choose your mode: "))
             except ValueError:
-                print("Sorry, you can choose only 1, 2 or 3 :(")
+                print("Sorry, you can choose only 1 or 3 :(")
         print("_" * 35)
+
+        # get rules type from user
+        for option, message in OPTIONS_RULES.items():
+            print(option, message)
+        print("_" * 35)
+        rule_option = 0
+        while rule_option not in OPTIONS_VIEW:
+            try:
+                rule_option = int(input("\nPlease choose rools: "))
+            except ValueError:
+                print("Sorry, you can choose only 1 or 2 :(")
+        print("_" * 35)
+
+        # get player type from user
         player = ""
         for option, player in OPTIONS_PLAYER.items():
             print(option, player)
@@ -49,6 +71,8 @@ class Menu:
             except ValueError:
                 print("Sorry, you can choose only 1, 2 or 3 :(")
         print("_" * 35)
+
+        # get board size from user
         board_size = ""
         while type(board_size) != int:
             try:
@@ -57,13 +81,21 @@ class Menu:
             except:
                 print("Please enter a number, not symbols or letters")
         print("_" * 35)
-        game = Game(board_size)
+
+        board = Board(board_size)
+        # rule type
+        if rule_option == 1:
+            game = ChangedRules(board_size, board)
+        else:
+            game = Game(board_size, board)
+        # player type
         if player == 1:
             player = Human()
         elif player == 2:
             player = SimpleAI(game.board, game, game.board_size)
         else:
-            player = AdvancedAI()
+            player = AdvancedAI(board, game, board_size)
+        # view type
         if view_option == 1:
             view = GameConsoleView(game, game.board)
         elif view_option == 2:

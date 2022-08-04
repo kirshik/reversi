@@ -3,8 +3,8 @@ from model.board import Board
 
 
 class ChangedRules(Game):
-    def __init__(self, board_size) -> None:
-        super().__init__(board_size)
+    def __init__(self, board_size, board: Board) -> None:
+        super().__init__(board_size, board)
 
     def is_valid_move(self, row, col) -> bool:
         """check validity of move if rooles allowed to put
@@ -17,7 +17,7 @@ class ChangedRules(Game):
         Returns:
             bool: validity of the move
         """
-        if self.board.is_inside(row, col):
+        if self.board.is_inside(row, col) and self.board.get_cell(row, col) == self.board.EMPTY_CELL:
             return True
         else:
             return False

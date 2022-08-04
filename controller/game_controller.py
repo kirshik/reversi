@@ -33,6 +33,7 @@ class GameController:
                 elif type(self.player_type) == SimpleAI:
                     if self.game.curr_player == Player.O:
                         get_move = self.player_type.make_move()
+                        console_game.display_ai_move(get_move)
                     else:
                         get_move = console_game.get_move()
                 else:

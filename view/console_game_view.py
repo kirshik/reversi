@@ -15,6 +15,12 @@ class GameConsoleView(GameView):
         self.board = board
         self.board_view = BoardConsoleView(game.board)
 
+    def display_ai_move(self, move):
+        try:
+            print(f'AI move: {move[0]+1}, {move[1]+1}')
+        except:
+            print(f'AI move: {move}')
+
     def get_move(self):
         """get move from the player
 
