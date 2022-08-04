@@ -94,7 +94,7 @@ class Game:
                 else:
                     pass
         # change player and check his valid moves
-        self.curr_player = self.OTHER_PLAYER - self.curr_player
+        self.change_player()
         for i in range(self.board_size):
             for j in range(self.board_size):
                 if self.board.get_cell(i, j) == self.board.EMPTY_CELL:
@@ -103,7 +103,7 @@ class Game:
                 else:
                     pass
         # change player back to save curr player position
-        self.curr_player = self.OTHER_PLAYER - self.curr_player
+        self.change_player()
 
         if self.board.is_full() or len(self.board.num_disks().keys()) == 2 or valid_moves == 0:
             return True

@@ -35,8 +35,7 @@ class Board:
         """function to define number of disks
 
         Returns:
-            dict: dictionary with number of disks
-            of player
+            dict: dictionary with number of disks of players
         """
         disks = {}  # key = player symbol, value = disks number
         for row in self.mat:
