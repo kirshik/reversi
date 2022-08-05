@@ -1,10 +1,8 @@
 from model.board import Board
 from model.game import Game
-from globals.symbols import DIRECTIONS
 from globals.symbols import SYMBOLS
 import copy
 from model.players import Player
-from view.console_board_view import BoardConsoleView
 
 
 class AdvancedAI():
