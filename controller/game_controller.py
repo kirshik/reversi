@@ -14,10 +14,6 @@ class GameController:
         self.view = view
         self.game = game
 
-    def choose_rule(self):
-        # TODO
-        print()
-
     def run_game(self):
         """put started disks, identificate
          player and run the game

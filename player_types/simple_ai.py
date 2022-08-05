@@ -1,5 +1,6 @@
 from model.board import Board
 from model.game import Game
+from model.players import Player
 from globals.symbols import DIRECTIONS
 
 
@@ -29,7 +30,7 @@ class SimpleAI:
                                                    curr_cell[1] + direction[1]):
                             curr_cell = (curr_cell[0] + direction[0],
                                          curr_cell[1] + direction[1])
-                            if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.game.OTHER_PLAYER - self.game.curr_player:
+                            if self.board.get_cell(curr_cell[0], curr_cell[1]) == Player(self.game.OTHER_PLAYER - self.game.curr_player):
                                 to_update.append(curr_cell)
                             elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.game.curr_player and len(to_update) > 0:
                                 move[len(to_update)] = (row, col)

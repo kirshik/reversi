@@ -46,6 +46,7 @@ class Board:
 
     def num_disks(self):
         """function to define number of disks of each player
+        key = player symbol, value = disks number
 
         Returns:
             dict: dictionary with number of disks of players
