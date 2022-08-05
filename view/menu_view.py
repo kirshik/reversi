@@ -85,9 +85,9 @@ class Menu:
         board = Board(board_size)
         # rule type
         if rule_option == 1:
-            game = ChangedRules(board_size, board)
+            game = ChangedRules(board)
         else:
-            game = Game(board_size, board)
+            game = Game(board)
         # player type
         if player == 1:
             player = Human()

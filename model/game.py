@@ -7,8 +7,8 @@ from globals.symbols import SYMBOLS, DIRECTIONS
 class Game:
     OTHER_PLAYER = 3
 
-    def __init__(self, board_size, board: Board) -> None:
-        self.board_size = board_size
+    def __init__(self, board: Board) -> None:
+        self.board_size = board.size
         self.board = board
         self.curr_player = Player.X
 
@@ -16,7 +16,7 @@ class Game:
         """put 4 started disks in the midle of board
         """
         absolut_pos = self.board_size//2 - 1
-        other_player = self.OTHER_PLAYER - self.curr_player
+        other_player = Player(self.OTHER_PLAYER - self.curr_player)
         # 1 disk current player
         self.board.update_cell(
             absolut_pos, absolut_pos, self.curr_player)
@@ -29,9 +29,9 @@ class Game:
         self.board.update_cell(absolut_pos + 1, absolut_pos, other_player)
 
     def change_player(self):
-        self.curr_player = self.OTHER_PLAYER - self.curr_player
+        self.curr_player = Player(self.OTHER_PLAYER - self.curr_player)
 
-    def is_valid_move(self, row, col) -> bool:
+    def is_valid_move(self, row: int, col: int) -> bool:
         """dinamical function depends of the rools
         show valid of player move
         go by all directions and check validity of move
@@ -43,6 +43,34 @@ class Game:
         target_cell = (row, col)
         if self.board.get_cell(row, col) == self.board.EMPTY_CELL:
 
+            # Go over all directrions and check cells with other player disks
+            # then turn them over
+            for direction in DIRECTIONS:
+                curr_cell = target_cell
+                to_update = []
+                while self.board.is_inside(curr_cell[0] + direction[0],
+                                           curr_cell[1] + direction[1]):
+                    curr_cell = (curr_cell[0] + direction[0],
+                                 curr_cell[1] + direction[1])
+                    if self.board.get_cell(curr_cell[0], curr_cell[1]) == Player(self.OTHER_PLAYER - self.curr_player):
+                        to_update.append(curr_cell)
+                    elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.curr_player and len(to_update) > 0:
+                        return True
+                    else:
+                        break
+        else:
+            return False
+        return False
+
+    def make_move(self, row: int, col: int):
+        """make move by updating cells in all directions
+
+        Args:
+            row (int): row of board
+            col (int): column of board
+        """
+        if self.is_valid_move(row, col):
+            target_cell = (row, col)
             for direction in DIRECTIONS:
                 curr_cell = target_cell
                 to_update = []
@@ -53,36 +81,14 @@ class Game:
                     if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
                         to_update.append(curr_cell)
                     elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.curr_player and len(to_update) > 0:
-                        return True
+                        for i in to_update:
+                            self.board.update_cell(
+                                i[0], i[1], self.curr_player)
                     else:
                         break
+            self.board.update_cell(row, col, self.curr_player)
         else:
-            return False
-        return False
-
-    def make_move(self, row, col):
-        """make move by updating cells in all directions
-
-        Args:
-            row (int): row of board
-            col (int): column of board
-        """
-        target_cell = (row, col)
-        for direction in DIRECTIONS:
-            curr_cell = target_cell
-            to_update = []
-            while self.board.is_inside(curr_cell[0] + direction[0],
-                                       curr_cell[1] + direction[1]):
-                curr_cell = (curr_cell[0] + direction[0],
-                             curr_cell[1] + direction[1])
-                if self.board.get_cell(curr_cell[0], curr_cell[1]) == self.OTHER_PLAYER - self.curr_player:
-                    to_update.append(curr_cell)
-                elif self.board.get_cell(curr_cell[0], curr_cell[1]) == self.curr_player and len(to_update) > 0:
-                    for i in to_update:
-                        self.board.update_cell(i[0], i[1], self.curr_player)
-                else:
-                    break
-        self.board.update_cell(row, col, self.curr_player)
+            return None
 
     def is_terminated(self) -> bool:
         """check game termination
