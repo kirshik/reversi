@@ -9,12 +9,12 @@ from model.players import Player
 
 
 class TestSimpleAi(unittest.TestCase):
-    def test_make_mave(self):
+    def test_make_move(self):
         board = Board(4)
         game = Game(board)
         game.put_started_disks()
 
-        ai = SimpleAI(board, game, board.size)
+        ai = SimpleAI(board, game)
         row, col = ai.make_move()
         game.make_move(row, col)
 

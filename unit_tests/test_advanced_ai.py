@@ -10,4 +10,4 @@ class TestAdvancedAI(unittest.TestCase):
         board = Board(8)
         game = Game(board)
         ai = AdvancedAI(board, game)
-        self.assertEqual(len(ai.heuristic_board()), 8)
+        self.assertEqual(len(ai.heuristic_board), 8)
