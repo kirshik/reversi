@@ -32,11 +32,12 @@ class GameController:
                         console_game.display_ai_move(get_move)
                     else:
                         get_move = console_game.get_move()
-                else:
+                elif type(self.player_type) == AdvancedAI:
                     if self.game.curr_player == Player.O:
                         get_move = self.player_type.make_move()
                     else:
                         get_move = console_game.get_move()
+
                 if get_move != "pass":
                     row, col = get_move
                     if self.game.is_valid_move(row, col):

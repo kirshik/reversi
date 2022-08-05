@@ -41,8 +41,7 @@ class GameConsoleView(GameView):
     def turn(self):
         """show gamers whose turn now
         """
-        print(
-            f'\nPlayer {SYMBOLS[self.game.curr_player]}: It\'s your turn')
+        print(f'\nPlayer {SYMBOLS[self.game.curr_player]}: It\'s your turn')
         print('To cancel the move enter \"pass\"')
 
     def draw_board(self):

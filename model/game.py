@@ -3,7 +3,6 @@ from model.board import Board
 from model.players import Player
 from globals.symbols import SYMBOLS, DIRECTIONS
 
-
 class Game:
     OTHER_PLAYER = 3
 
@@ -122,7 +121,7 @@ class Game:
         else:
             return False
 
-    def check_winner(self, path, date_time):
+    def check_winner(self, path=None, date_time=None):
         """define winner and write data of the game in file
 
         Args:
@@ -146,8 +145,9 @@ class Game:
             winner = 0
         summary = (
             f'Date and time of the Game: {date_time}\n Winner: {SYMBOLS[winner]}\n X: {num_disks[Player.X]} , O: {num_disks[Player.O]}')
-
+        
         if self.is_terminated():
-            with open(path, "w") as f:
-                f.write(summary)
+            if not path is None:
+                with open(path, "w") as f:
+                    f.write(summary)
             return SYMBOLS[winner]
