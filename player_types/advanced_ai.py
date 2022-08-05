@@ -6,13 +6,15 @@ import copy
 from model.players import Player
 from view.console_board_view import BoardConsoleView
 
-# n=0
 
 class AdvancedAI():
     def __init__(self, board: Board, game: Game) -> None:
         self.board = board
         self.game = game
         self.board_size = board.size
+        self.heuristic_board()
+        self.max_depth = 30
+        self.min_score = 0
 
     def heuristic_board(self):
         heuristic_board = []
@@ -41,23 +43,34 @@ class AdvancedAI():
                     else:
                         row.append(1)
             heuristic_board.append(row)
+        self.heuristic_board = heuristic_board
 
-        return heuristic_board
+    def heuristic_func(self, board_state: Board):
+        res = 0
+        for i in range(self.board_size):
+            for j in range(self.board_size):
+                if board_state.get_cell(i, j) == Player.O:
+                    res += self.heuristic_board[i][j]
+                elif board_state.get_cell(i, j) == Player.X:
+                    res -= self.heuristic_board[i][j]
+        return res
 
-    def minimax(self, board: Board, max_player, min_player):
-        # global n
-        # print(f'ITERATION {n} player {max_player}')
-        # BoardConsoleView(board).draw_board()
-        # n+=1
+    def minimax(self, board: Board, max_player, min_player, depth):
+        score = self.heuristic_func(board)
+        if depth > self.max_depth:
+            return score
+        if score < self.min_score:
+            return score
 
         game = Game(board)
-        if max_player % 2: game.change_player()
+        if max_player % 2:
+            game.change_player()
         # if game in terminal state return 1/-1/0 for win/lose/draw for  AI
         if game.is_terminated():
             if game.check_winner() == SYMBOLS[max_player]:
-                return 1
+                return 10**5
             elif game.check_winner() == SYMBOLS[min_player]:
-                return -1
+                return -10**5
             else:
                 return 0
 
@@ -66,23 +79,23 @@ class AdvancedAI():
         # possible_moves for AI player
         for i in range(self.board_size):
             for j in range(self.board_size):
-                    if game.is_valid_move(i, j):
-                        possible_moves.append((i, j))
+                if game.is_valid_move(i, j):
+                    possible_moves.append((i, j))
         for move in possible_moves:
             new_board = copy.deepcopy(board)
             new_game = Game(new_board)
-            if max_player % 2: new_game.change_player()
+            if max_player % 2:
+                new_game.change_player()
             new_game.make_move(move[0], move[1])
 
-            board_value = self.minimax(new_board, min_player, max_player)
-            
+            board_value = self.minimax(
+                new_board, min_player, max_player, depth+1)
+
             values.append(board_value)
 
         if Player.X == max_player:
-            # print("player 0")
             return max(values)
         else:
-            # print("player x")
             return min(values)
 
     def choose_move(self):
@@ -100,11 +113,9 @@ class AdvancedAI():
             new_game.change_player()
             new_game.make_move(move[0], move[1])
             board_value = self.minimax(
-                new_board, self.game.curr_player, Player(self.game.OTHER_PLAYER - self.game.curr_player))
+                new_board, self.game.curr_player, Player(self.game.OTHER_PLAYER - self.game.curr_player), depth=1)
             board_values[move] = board_value
-        print(board_values)
-        print([i+1 for i in max(board_values, key = board_values.get)])
-        return max(board_values, key = board_values.get)
+        return max(board_values, key=board_values.get)
 
     def make_move(self):
         return self.choose_move()
