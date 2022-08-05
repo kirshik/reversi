@@ -92,9 +92,9 @@ class Menu:
         if player == 1:
             player = Human()
         elif player == 2:
-            player = SimpleAI(game.board, game, game.board_size)
+            player = SimpleAI(board, game)
         else:
-            player = AdvancedAI(board, game, board_size)
+            player = AdvancedAI(board, game)
         # view type
         if view_option == 1:
             view = GameConsoleView(game, game.board)

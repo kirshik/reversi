@@ -6,10 +6,10 @@ import copy
 
 
 class AdvancedAI():
-    def __init__(self, board: Board, game: Game, board_size: int) -> None:
+    def __init__(self, board: Board, game: Game) -> None:
         self.board = board
         self.game = game
-        self.board_size = board_size
+        self.board_size = board.size
 
     def heuristic_board(self):
         heuristic_board = []

@@ -1,13 +1,50 @@
 @startuml Reversi Diagram
+namespace GameController{
 class GameController{
   +view : GameView
   +game : Game
   +choose_rules()
   +run_game()
   }
+}
+namespace exceptions{
 class InvalidMoveError{
   message: str
 }
+
+class InvalidBoardSizeError{
+  message: str
+}
+model.Board <|-- InvalidBoardSizeError
+GameController.GameController <|-- InvalidMoveError
+}
+
+namespace player_type{
+class Human{
+  +game : Game
+  +board : Board
+}
+class SimpleAI{
+  +game : Game
+  +board : Board
+  -make_move()
+
+}
+class AdvancedAI{
+  +game : Game
+  +board : Board
+  -make_move()
+
+}
+}
+namespace Rules{
+class ChangedRules{
+  +is_valid_move()
+}
+model.Game <|-- ChangedRules
+}
+
+namespace model{
 class Board{
   EMPTY_CELL = 0 
   size : int
@@ -35,6 +72,9 @@ class Player(IntEnum){
   X = 1
   O = 2
 }
+Game <|-- Board 
+}
+namespace view{
 class BoardView{
   board : Board
   draw_board()
@@ -62,9 +102,9 @@ class ConsoleGameView{
 }
 GameView <|-- ConsoleGameView
 BoardView <|-- ConsoleBoardView
-GameController <|-- (GameView, Game)
-GameController <|-- BoardView
-Game <|-- Board 
-GameController <|-- InvalidMoveError
+}
+GameController <|-- view
+GameController <|-- model
+GameController *-- player_type
 
 @enduml

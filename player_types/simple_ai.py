@@ -5,10 +5,10 @@ from globals.symbols import DIRECTIONS
 
 
 class SimpleAI:
-    def __init__(self, board: Board, game: Game, board_size: int) -> None:
+    def __init__(self, board: Board, game: Game) -> None:
         self.game = game
         self.board = board
-        self.board_size = board_size
+        self.board_size = board.size
 
     def make_move(self):
         """check all possible moves and define move 
