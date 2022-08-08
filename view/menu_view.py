@@ -6,6 +6,7 @@ from player_types.simple_ai import SimpleAI
 from player_types.advanced_ai import AdvancedAI
 from model.board import Board
 from rules.rules import ChangedRules
+from view.graphic_menu_view import Reversi, GEOMETRY
 
 
 class Menu:
@@ -47,6 +48,10 @@ class Menu:
             except ValueError:
                 print("Sorry, you can choose only 1 or 3 :(")
         print("_" * 35)
+        if view_option == 3:
+            app = Reversi()
+            app.geometry(GEOMETRY)
+            app.mainloop()
 
         # get rules type from user
         for option, message in OPTIONS_RULES.items():
@@ -101,8 +106,6 @@ class Menu:
         elif view_option == 2:
             print("Sorry, only console view available for now(")
             view = GameConsoleView(game, game.board)
-        elif view_option == 3:
-            print("Sorry, only console view available for now(")
-            view = GameConsoleView(game, game.board)
+
         g1 = GameController(view, game, player)
         g1.run_game()
